@@ -1,6 +1,6 @@
 from email.message import EmailMessage
 from collections.abc import Collection
-from person import Person
+from person import Emailable
 from itertools import chain
 
 
@@ -12,9 +12,9 @@ It can be used if sending the e-mail should be done at a later point in time.
 class Envelope:
     def __init__(self, 
                  msg: EmailMessage,
-                 to: Person | Collection[Person],
-                 cc: Person | Collection[Person] | None = None,
-                 bcc: Person | Collection[Person] | None = None
+                 to: Emailable | Collection[Emailable],
+                 cc: Emailable | Collection[Emailable] | None = None,
+                 bcc: Emailable | Collection[Emailable] | None = None
                  ) -> None:
         
         if cc is None:
@@ -30,9 +30,9 @@ class Envelope:
             bcc = [bcc]
 
         self.msg: EmailMessage = msg
-        self.to: Collection[Person] = to
-        self.cc: Collection[Person] = cc
-        self.bcc: Collection[Person] = bcc
+        self.to: Collection[Emailable] = to
+        self.cc: Collection[Emailable] = cc
+        self.bcc: Collection[Emailable] = bcc
     
     @property
     def all_recipients(self):

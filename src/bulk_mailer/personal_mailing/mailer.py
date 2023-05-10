@@ -1,7 +1,7 @@
 from collections.abc import Collection
 from email.message import EmailMessage
 from generic_mailing.mailer import SMTP_CONFIG, Mailer as GenericMailer, SendCancelled
-from person import Person
+from person import Emailable
 from typing import Any
 import logging
 from .queue import MailQueue
@@ -14,7 +14,7 @@ log = logging.getLogger()
 
 
 class Mailer:
-    def __init__(self, config: SMTP_CONFIG, sender: Person, confirm_send: bool = False, delay_secs: float = 0, detailed_log: bool = True) -> None:
+    def __init__(self, config: SMTP_CONFIG, sender: Emailable, confirm_send: bool = False, delay_secs: float = 0, detailed_log: bool = True) -> None:
         self.mailer = GenericMailer(config, sender, confirm_send, delay_secs=delay_secs, detailed_log=detailed_log)
         self.detailed_log = detailed_log
 
@@ -27,7 +27,7 @@ class Mailer:
 
     # returns reply if error
     # returns None if success
-    def send_mail(self, msg: EmailMessage, to: Person) -> Error:
+    def send_mail(self, msg: EmailMessage, to: Emailable) -> Error:
         _, failed = self.mailer.send_mail(msg, to)
         return next(iter(failed.values())) if failed else None
 
@@ -42,10 +42,10 @@ class Mailer:
             result = SendResult(env, error, cancelled)
             yield result
     
-    def send_queue(self, queue: MailQueue) -> tuple[Collection[Person], Collection[Person], Collection[Person]]:
-        succeeded: set[Person] = set()
-        failed: set[Person] = set()
-        cancelled: set[Person] = set()
+    def send_queue(self, queue: MailQueue) -> tuple[Collection[Emailable], Collection[Emailable], Collection[Emailable]]:
+        succeeded: set[Emailable] = set()
+        failed: set[Emailable] = set()
+        cancelled: set[Emailable] = set()
 
         log.info(f"Sending {len(queue)} queued personal e-mails")
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 import smtplib, ssl
 from email.message import EmailMessage
-from person import Person
+from person import Emailable
 from collections.abc import Collection, Iterable
 import logging
 from typing import Any, TYPE_CHECKING
@@ -25,6 +25,8 @@ class SMTP_CONFIG:
                  username: str|None = None,
                  password: str|None = None
                  ) -> None:
+        if not address:
+            raise ValueError('Address cannot be empty')
         self.address = address
         self.port = port
         self.ssl = ssl
@@ -43,13 +45,13 @@ class IncompleteLoginError(Exception):
 # works with 'with' statement
 
 class Mailer:
-    sender: Person
+    sender: Emailable
     confirm_send: bool
     server: smtplib.SMTP
     last_send: float = 0
     delay_secs: float
 
-    def __init__(self, config: SMTP_CONFIG, sender: Person, confirm_send:bool=False, delay_secs:float=0, detailed_log:bool=True) -> None:
+    def __init__(self, config: SMTP_CONFIG, sender: Emailable, confirm_send:bool=False, delay_secs:float=0, detailed_log:bool=True) -> None:
         self.sender = sender
         self.confirm_send = confirm_send
         self.delay_secs = delay_secs
@@ -94,9 +96,9 @@ class Mailer:
     # returns tuple (succeeded, failed)
     def send_mail(self,
              msg: EmailMessage,
-             to: Person | Collection[Person],
-             cc: Person | Collection[Person] | None = None,
-             bcc: Person | Collection[Person] | None = None,
+             to: Emailable | Collection[Emailable],
+             cc: Emailable | Collection[Emailable] | None = None,
+             bcc: Emailable | Collection[Emailable] | None = None,
              confirm: bool | None = None
              ) -> tuple[SendSuccs, SendErrs]:
         

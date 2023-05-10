@@ -6,20 +6,20 @@ class Emailable:
         self.email_address = email_address
         self.name = name
 
+    @property
+    def email_header_name(self) -> str:
+        return formataddr((self.name, self.email_address))
+
 
 class Person(Emailable):
     def __init__(self, first_name:str, last_name:str, email_address:str) -> None:
         self.first_name = first_name
         self.last_name = last_name
-        super().__init__(email_address, self.full_name)
+        super().__init__(email_address, f"{self.first_name} {self.last_name}")
 
-    @property
-    def full_name(self) -> str:
-        return f"{self.first_name} {self.last_name}"
-
-    @property
-    def email_header_name(self) -> str:
-        return formataddr((self.full_name, self.email_address))
+    # @property
+    # def full_name(self) -> str:
+    #     return f"{self.first_name} {self.last_name}"
     
     def __str__(self) -> str:
-        return f"{self.full_name} ({self.email_address})"
+        return f"{self.name} ({self.email_address})"
