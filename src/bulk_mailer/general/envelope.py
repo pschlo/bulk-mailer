@@ -1,6 +1,6 @@
 from email.message import EmailMessage
 from collections.abc import Collection
-from person import Emailable
+from bulk_mailer.entities import Emailable
 from itertools import chain
 
 
@@ -22,11 +22,11 @@ class Envelope:
         if bcc is None:
             bcc = []
 
-        if not isinstance(to, Collection):
+        if isinstance(to, Emailable):
             to = [to]
-        if not isinstance(cc, Collection):
+        if isinstance(cc, Emailable):
             cc = [cc]
-        if not isinstance(bcc, Collection):
+        if isinstance(bcc, Emailable):
             bcc = [bcc]
 
         self.msg: EmailMessage = msg

@@ -1,7 +1,7 @@
 from __future__ import annotations
 import smtplib, ssl
 from email.message import EmailMessage
-from person import Emailable
+from bulk_mailer.entities import Emailable
 from collections.abc import Collection, Iterable
 import logging
 from typing import Any, TYPE_CHECKING
@@ -9,7 +9,7 @@ import time
 from .envelope import Envelope
 from .result import SendResult
 from .types import SendErrs, SendSuccs
-from mail_utils import ask_mail_confirmation
+from bulk_mailer.utils import ask_mail_confirmation
 
 
 log = logging.getLogger()

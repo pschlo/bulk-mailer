@@ -1,5 +1,5 @@
 from email.message import EmailMessage
-from person import Emailable
+from bulk_mailer.entities import Emailable
 
 class Envelope:
     def __init__(self, msg: EmailMessage, to: Emailable) -> None:

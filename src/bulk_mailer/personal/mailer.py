@@ -1,7 +1,7 @@
 from collections.abc import Collection
 from email.message import EmailMessage
-from generic_mailing.mailer import SMTP_CONFIG, Mailer as GenericMailer, SendCancelled
-from person import Emailable
+from bulk_mailer.general.mailer import SMTP_CONFIG, Mailer as GenericMailer, SendCancelled
+from bulk_mailer.entities import Emailable
 from typing import Any
 import logging
 from .queue import MailQueue

@@ -4,12 +4,12 @@ from pathlib import PurePath
 from collections.abc import Collection
 from mimetypes import guess_type
 try:
-    from confirm_mail_interactive import ask_send_confirmation as _ask_send_confirmation
+    from .confirm_mail_interactive import ask_send_confirmation as _ask_send_confirmation
 except ModuleNotFoundError:
-    from confirm_mail_stdout import ask_send_confirmation as _ask_send_confirmation
+    from .confirm_mail_stdout import ask_send_confirmation as _ask_send_confirmation
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from generic_mailing.mailer import Envelope
+    from bulk_mailer.general.envelope import Envelope
 
 
 
@@ -48,18 +48,20 @@ def mail_to_str(envelope: Envelope) -> str:
     return text
 
 
-def create_plain_mail(subject: str, body: str, attachments: PurePath | Collection[PurePath] | None = None) -> EmailMessage:
+def create_plain_mail(subject: str, body: str, attachments: str | PurePath | Collection[str|PurePath] | None = None) -> EmailMessage:
     if attachments is None:
         attachments = []
-
-    if not isinstance(attachments, Collection):
+    if isinstance(attachments, str | PurePath):
         attachments = [attachments]
-
+    
     msg = EmailMessage()
     msg["Subject"] = subject
     msg.set_content(body, subtype='plain')
 
     for attachment in attachments:
+        if isinstance(attachment, str):
+            attachment = PurePath(attachment)
+
         with open(attachment, 'rb') as f:
             data = f.read()
 

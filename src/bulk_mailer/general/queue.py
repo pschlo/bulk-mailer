@@ -1,11 +1,11 @@
 from __future__ import annotations
 from email.message import EmailMessage
-from person import Person
+from bulk_mailer.entities import Person
 from collections.abc import Collection
 from typing import TYPE_CHECKING, Any
-from mail_utils import ask_mail_confirmation
+from bulk_mailer.utils import ask_mail_confirmation
 import logging
-from generic_mailing.envelope import Envelope
+from .envelope import Envelope
 
 
 log = logging.getLogger()

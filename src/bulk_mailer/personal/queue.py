@@ -2,7 +2,7 @@ from collections.abc import Collection
 from typing import Any, TypeVar, Callable
 from .envelope import Envelope
 from email.message import EmailMessage
-from person import Person
+from bulk_mailer.entities import Person
 import logging
 
 
